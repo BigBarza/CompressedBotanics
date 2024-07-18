@@ -1,12 +1,16 @@
-## Compressed Engineering
+## Compressed Botanics
 
 This mod is an addon for Botania, implementing features needed for the Compression modpack.
 
 ## Implemented features:
 ### Floral Entropy
 You can configure datapackable recipes to make mana generating flowers decay after a while, dropping some items.
+
 USAGE:
-`
+
+*/data/compressedbotanics/recipes/hydroangeas.json*
+
+```
 {
   "type": "compressedbotanics:floral_entropy",
   "flower": "botania:hydroangeas",  # The flower that should decay, catches floating variants as well.
@@ -28,7 +32,7 @@ USAGE:
   "minDecayTicks": 60000, # Even with enough mana generated, won't decay before this many ticks have passed since placing (Optional)
   "maxDecayTicks": 100000 # Can randomly decay before this many ticks have passed if conditions are met. Will always decay after this treshold.
 }
-`
+```
 
 Curseforge link: [TBA]
 
