@@ -1,0 +1,20 @@
+{
+  "type": "compressedbotanics:floral_entropy",
+  "flower": "botania:hydroangeas",
+  "block" : "minecraft:soul_torch",
+  "result": [
+    {
+      "item": "minecraft:snowball",
+      "count": 10,
+      "chance": 0.5
+    },
+    {
+      "item": "minecraft:ice",
+      "count": 3,
+      "chance": 0.2,
+      "allOrNothing": true
+    }
+  ],
+  "minDecayTicks": 60,
+  "maxDecayTicks": 100
+}
