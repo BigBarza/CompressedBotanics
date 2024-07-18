@@ -1,4 +1,4 @@
-## Compressed Engineering
+## Compressed Botanics
 
 This mod is an addon for Botania, implementing features needed for the Compression modpack.
 
@@ -7,6 +7,8 @@ This mod is an addon for Botania, implementing features needed for the Compressi
 You can configure datapackable recipes to make mana generating flowers decay after a while, dropping some items.
 
 USAGE:
+
+*/data/compressedbotanics/recipes/hydroangeas.json*
 
 ```
 {
