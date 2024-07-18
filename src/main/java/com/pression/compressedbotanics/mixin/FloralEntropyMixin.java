@@ -1,6 +1,8 @@
 package com.pression.compressedbotanics.mixin;
 
-import com.pression.compressedbotanics.recipe.*;
+import com.pression.compressedbotanics.recipe.ChanceOutput;
+import com.pression.compressedbotanics.recipe.FloralEntropyRecipe;
+import com.pression.compressedbotanics.recipe.FloralEntropyRecipeType;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -19,6 +21,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vazkii.botania.api.block_entity.GeneratingFlowerBlockEntity;
+import vazkii.botania.common.block.BotaniaBlocks;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -77,6 +80,7 @@ public class FloralEntropyMixin {
                     level.setBlockAndUpdate(pos, decayedBlock);
                     if(!recipe.getResult().isEmpty()) {
                         for (ChanceOutput output : recipe.getResult()) {
+                            if(output.isSpecial() && !isOvergrow(flower)) continue; //Special outputs can only be obtained by having the flower decay on enchanted soil.
                             ItemStack item = output.rollItem();
                             if (item != ItemStack.EMPTY) { //An empty itemstack is returned if an AoN roll fails or no rolls pass on a regular one.
                                 ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
@@ -99,6 +103,11 @@ public class FloralEntropyMixin {
             if(recipe.getFlower().equals(flower)) return recipe;
         }
         return null;
+    }
+    @Unique
+    private boolean isOvergrow(GeneratingFlowerBlockEntity flower){ //This function is in SpecialFlowerBlockEntity but for SOME reason, it's inaccessible. So i'm making my own.
+        if(flower.isFloating()) return false;
+        return flower.getLevel().getBlockState(flower.getBlockPos().below()).is(BotaniaBlocks.enchantedSoil);
     }
 
 }

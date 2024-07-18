@@ -6,11 +6,13 @@ public class ChanceOutput { //This is a data structure to hold output items and 
     private ItemStack item;
     private float chance;
     private boolean allOrNothingFlag;
+    private boolean specialFlag;
 
-    public ChanceOutput(ItemStack item, float chance, boolean flag){
+    public ChanceOutput(ItemStack item, float chance, boolean aonFlag, boolean special){
         this.item = item.copy();
         this.chance = chance;
-        this.allOrNothingFlag = flag;
+        this.allOrNothingFlag = aonFlag;
+        this.specialFlag = special;
     }
 
     public ItemStack rollItem(){
@@ -38,4 +40,6 @@ public class ChanceOutput { //This is a data structure to hold output items and 
     public boolean isAllOrNothingFlag() {
         return allOrNothingFlag;
     }
+
+    public boolean isSpecial(){return specialFlag; };
 }

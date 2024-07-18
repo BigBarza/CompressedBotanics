@@ -20,6 +20,7 @@ USAGE:
       "item": "minecraft:snowball",
       "count": 10,
       "chance": 0.5 # 10 rolls at 50% chance
+      "enchanted": true # The flower needs to be on enchanted soil. Floating flowers don't meet the condition.
     },
     {
       "item": "minecraft:ice",

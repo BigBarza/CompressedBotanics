@@ -102,7 +102,9 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
                     if (obj.has("chance")) chance = GsonHelper.getAsFloat(obj, "chance");
                     boolean flag = false;
                     if (obj.has("allOrNothing")) flag = GsonHelper.getAsBoolean(obj, "allOrNothing");
-                    decayResult.add(new ChanceOutput(item, chance, flag));
+                    boolean special = false;
+                    if(obj.has("enchanted")) special = GsonHelper.getAsBoolean(obj, "enchanted");
+                    decayResult.add(new ChanceOutput(item, chance, flag, special));
                 }
             }
             int minTime = 0;
@@ -123,7 +125,8 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
                 ItemStack item = buf.readItem();
                 float chance = buf.readFloat();
                 boolean flag = buf.readBoolean();
-                result.add(new ChanceOutput(item, chance, flag));
+                boolean special = buf.readBoolean();
+                result.add(new ChanceOutput(item, chance, flag, special));
             }
             int minTime = buf.readInt();
             int maxTime = buf.readInt();
@@ -140,6 +143,7 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
                 buf.writeItem(out.getItem());
                 buf.writeFloat(out.getChance());
                 buf.writeBoolean(out.isAllOrNothingFlag());
+                buf.writeBoolean(out.isSpecial());
             }
             buf.writeInt(recipe.getMinDecayTicks());
             buf.writeInt(recipe.getMaxDecayTicks());

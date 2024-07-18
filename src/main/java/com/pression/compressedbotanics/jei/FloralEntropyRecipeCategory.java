@@ -116,8 +116,9 @@ public class FloralEntropyRecipeCategory implements IRecipeCategory<FloralEntrop
 
     private Collection<Component> getOutputTooltip(ChanceOutput output){
         List<Component> tooltips = new ArrayList<>();
-        tooltips.add(Component.literal("Chance: "+(output.getChance() >= 1 ? 100 : 100*output.getChance())+"%"));
+        tooltips.add(Component.literal("Chance: "+(output.getChance())));
         tooltips.add(Component.literal(output.isAllOrNothingFlag() ? "All or nothing" : "Individual rolls"));
+        if(output.isSpecial()) tooltips.add(Component.literal("Enchanted soil required"));
         return tooltips;
     }
 
