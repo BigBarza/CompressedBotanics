@@ -3,7 +3,6 @@ package com.pression.compressedbotanics.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.pression.compressedbotanics.CompressedBotanics;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -14,6 +13,7 @@ import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
@@ -90,7 +90,7 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
         @Override
         public FloralEntropyRecipe fromJson(ResourceLocation id, JsonObject json) {
             ResourceLocation flower = new ResourceLocation(GsonHelper.getAsString(json, "flower"));
-            ResourceLocation block = new ResourceLocation(CompressedBotanics.MODID, "null");
+            ResourceLocation block = ForgeRegistries.BLOCKS.getKey(Blocks.AIR);
             if(json.has("block")) block = new ResourceLocation(GsonHelper.getAsString(json, "block"));
             List<ChanceOutput> decayResult = new ArrayList<>();
             if(json.has("result")) {
