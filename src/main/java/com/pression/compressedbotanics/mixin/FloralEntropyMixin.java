@@ -31,6 +31,7 @@ public class FloralEntropyMixin {
 
     @Unique private int prevMana = 0; //Used to tally up mana
     @Unique private int manaTally = 0; //Used for the min generated mana condition.
+    @Unique private boolean decayFlag = false; //This indicates when the flower CAN decay, assuming the mana condition passes.
     @Unique GeneratingFlowerBlockEntity flower = (GeneratingFlowerBlockEntity)(Object)this; //I don't know if it SHOULD work up here, but it does, so i'm not complaining.
     @Shadow(remap = false) private int mana; //This just accesses the flower's internal mana storage. DO NOT MODIFY HERE, call flower.addMana(int) instead.
 
@@ -56,12 +57,14 @@ public class FloralEntropyMixin {
     @Inject(method = "readFromPacketNBT", at = @At("TAIL"), remap = false)
     private void onReadNBT(CompoundTag cmp, CallbackInfo ci){
         if(cmp.contains("manaTally")) manaTally = cmp.getInt("manaTally");
+        if(cmp.contains("decayFlag")) decayFlag = cmp.getBoolean("decayFlag");
         if(prevMana != mana) prevMana = mana; //Prevents gaining more tallied mana by resetting
     }
     //Also i'm aware it's not supposed to be these two methods, but they work, so i guess?
     @Inject(method = "writeToPacketNBT", at = @At("TAIL"), remap = false)
     private void onWriteNBT(CompoundTag cmp, CallbackInfo ci){
         cmp.putInt("manaTally", manaTally);
+        cmp.putBoolean("decayFlag", decayFlag);
     }
 
 
@@ -70,7 +73,10 @@ public class FloralEntropyMixin {
         if(flower.getLevel().isClientSide()) return; //Weird stuff happens if this is not checked.
         if(Math.random() < 0.05F){ //Note: if adjusting this, adjust also the chance multiplier in calcDecayChance
             FloralEntropyRecipe recipe = getResult(BlockEntityType.getKey(flower.getType())); //NOTE: This does NOT care for the variant of flower, be it floating, or chibi (Petit).
-            if(recipe != null && flower.ticksExisted >= recipe.getMinDecayTicks() && manaTally >= recipe.getMinTalliedMana()) {
+            if(!decayFlag && recipe != null){
+                    if(Math.random() <= calcDecayChance(flower.ticksExisted, recipe.getMaxDecayTicks(), recipe.getMinDecayTicks())) decayFlag = true;
+            }
+            if(recipe != null && decayFlag && manaTally >= recipe.getMinTalliedMana()) { //Recheck the recipe, in case it has reloaded. Even if i implement proper recipe reloading, decayflag probably shouldn't be reset.
                 double decayChance = calcDecayChance(flower.ticksExisted, recipe.getMaxDecayTicks(), recipe.getMinDecayTicks());
                 if(Math.random() <= decayChance) entropyTime(flower, recipe); //Decay chance rolled, it's e n t r o p y time.
             }
@@ -116,6 +122,7 @@ public class FloralEntropyMixin {
 
     private double calcDecayChance(int timeOriginal, int max, int min){
         if(max <= 0) return 1; // because of fucking course the first one i try, i set a max time of 0.
+        if(timeOriginal < min) return 0; //If we haven't passed the minimum time, the check should always fail.
         int time = timeOriginal; //Idk if it's a pointer, and i don't wanna find out.
         time -= min; //subtract min from both time and max since we want the curve to be from min to max
         max -=min;
