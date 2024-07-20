@@ -68,34 +68,38 @@ public class FloralEntropyMixin {
     @Inject(method = "tickFlower", at = @At("TAIL"), remap = false)
     private void onTickFlower(CallbackInfo ci){
         if(flower.getLevel().isClientSide()) return; //Weird stuff happens if this is not checked.
-        if(Math.random() < 0.05F){ //TODO: Add configurable interval, currently set to roll quite often. Maybe even a dynamic one.
+        if(Math.random() < 0.05F){ //Note: if adjusting this, adjust also the chance multiplier in calcDecayChance
             FloralEntropyRecipe recipe = getResult(BlockEntityType.getKey(flower.getType())); //NOTE: This does NOT care for the variant of flower, be it floating, or chibi (Petit).
             if(recipe != null && flower.ticksExisted >= recipe.getMinDecayTicks() && manaTally >= recipe.getMinTalliedMana()) {
-                float decayChance = (float) flower.ticksExisted / recipe.getMaxDecayTicks(); //TODO: Implement some kind of statistical curve, like "have a 50% chance to have decayed halfway to max decay time"
-                if(Math.random() < decayChance){ //Decay chance rolled, e n t r o p y time.
-                    Level level = flower.getLevel();
-                    BlockPos pos = flower.getBlockPos();
-                    flower.getLevel().destroyBlock(pos, false);
-                    BlockState decayedBlock = ForgeRegistries.BLOCKS.getValue(recipe.getBlock()).defaultBlockState();
-                    level.setBlockAndUpdate(pos, decayedBlock);
-                    if(!recipe.getResult().isEmpty()) {
-                        for (ChanceOutput output : recipe.getResult()) {
-                            if(output.isSpecial() && !isOvergrow(flower)) continue; //Special outputs can only be obtained by having the flower decay on enchanted soil.
-                            ItemStack item = output.rollItem();
-                            if (item != ItemStack.EMPTY) { //An empty itemstack is returned if an AoN roll fails or no rolls pass on a regular one.
-                                ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
-                                double d0 = level.random.nextDouble() * 0.2 - 0.1;
-                                double d1 = level.random.nextDouble() * 0.2;
-                                double d2 = level.random.nextDouble() * 0.2 - 0.1;
-                                droppedItem.setDeltaMovement(new Vec3(d0, d1, d2)); //Fling them around a bit.
-                                level.addFreshEntity(droppedItem);
-                            }
-                        }
-                    }
+                double decayChance = calcDecayChance(flower.ticksExisted, recipe.getMaxDecayTicks(), recipe.getMinDecayTicks());
+                if(Math.random() <= decayChance) entropyTime(flower, recipe); //Decay chance rolled, it's e n t r o p y time.
+            }
+        }
+    }
+
+    private void entropyTime(GeneratingFlowerBlockEntity flower, FloralEntropyRecipe recipe){
+        Level level = flower.getLevel();
+        BlockPos pos = flower.getBlockPos();
+        flower.getLevel().destroyBlock(pos, false);
+        BlockState decayedBlock = ForgeRegistries.BLOCKS.getValue(recipe.getBlock()).defaultBlockState();
+        level.setBlockAndUpdate(pos, decayedBlock);
+        if(!recipe.getResult().isEmpty()) {
+            for (ChanceOutput output : recipe.getResult()) {
+                if(output.isSpecial() && !isOvergrow(flower)) continue; //Special outputs can only be obtained by having the flower decay on enchanted soil.
+                ItemStack item = output.rollItem();
+                if (item != ItemStack.EMPTY) { //An empty itemstack is returned if an AoN roll fails or no rolls pass on a regular one.
+                    ItemEntity droppedItem = new ItemEntity(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, item);
+                    double d0 = level.random.nextDouble() * 0.2 - 0.1;
+                    double d1 = level.random.nextDouble() * 0.2;
+                    double d2 = level.random.nextDouble() * 0.2 - 0.1;
+                    droppedItem.setDeltaMovement(new Vec3(d0, d1, d2)); //Fling them around a bit.
+                    level.addFreshEntity(droppedItem);
                 }
             }
         }
     }
+
+
     @Nullable
     private FloralEntropyRecipe getResult(ResourceLocation flower){
         List<FloralEntropyRecipe> recipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(FloralEntropyRecipeType.FLORAL_ENTROPY_RECIPE_TYPE.get());
@@ -108,6 +112,15 @@ public class FloralEntropyMixin {
     private boolean isOvergrow(GeneratingFlowerBlockEntity flower){ //This function is in SpecialFlowerBlockEntity but for SOME reason, it's inaccessible. So i'm making my own.
         if(flower.isFloating()) return false;
         return flower.getLevel().getBlockState(flower.getBlockPos().below()).is(BotaniaBlocks.enchantedSoil);
+    }
+
+    private double calcDecayChance(int timeOriginal, int max, int min){
+        if(max <= 0) return 1; // because of fucking course the first one i try, i set a max time of 0.
+        int time = timeOriginal; //Idk if it's a pointer, and i don't wanna find out.
+        time -= min; //subtract min from both time and max since we want the curve to be from min to max
+        max -=min;
+        double chance = (time/max)/(max/2.5); //This would be the chance for if we rolled every tick.
+        return chance*20; //But we're rolling a 1/20 beforehand so the chance needs to be adjusted.
     }
 
 }

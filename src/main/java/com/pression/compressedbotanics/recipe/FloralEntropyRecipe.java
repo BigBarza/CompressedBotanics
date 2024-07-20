@@ -14,6 +14,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.Nullable;
 
@@ -82,7 +83,11 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
     public ItemStack getFlowerAsItemStack(){
         return new ItemStack(ForgeRegistries.ITEMS.getValue(getFlower()), 1);
     }
-    public ItemStack getBlockAsItemStack(){
+    public ItemStack getBlockAsItemStack(){ //This is used for JEI
+        if(ForgeRegistries.FLUIDS.containsKey(getBlock())){ //Return bucket instead
+            Fluid fluid = ForgeRegistries.FLUIDS.getValue(getBlock());
+            return new ItemStack(fluid.getBucket());
+        }
         return new ItemStack(ForgeRegistries.ITEMS.getValue(getBlock()), 1);
     }
 
