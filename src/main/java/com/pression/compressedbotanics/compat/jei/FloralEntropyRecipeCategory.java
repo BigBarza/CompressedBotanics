@@ -1,4 +1,4 @@
-package com.pression.compressedbotanics.jei;
+package com.pression.compressedbotanics.compat.jei;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -41,13 +41,19 @@ public class FloralEntropyRecipeCategory implements IRecipeCategory<FloralEntrop
     private final IDrawable icon;
     private final IDrawable overlay;
     private final IDrawable zoomLens;
+    private final IDrawable slot;
+    private final IDrawable overgrownSeed;
+    private final IDrawable enchantAlert;
     private final ResourceLocation texPath = new ResourceLocation(CompressedBotanics.MODID, "textures/gui/jei.png");
 
     public FloralEntropyRecipeCategory(IGuiHelper guiHelper){
         this.title = Component.literal("Floral Entropy");
-        this.background = guiHelper.createBlankDrawable(120, 58);
-        this.overlay = guiHelper.createDrawable(texPath, 0,0, 110 ,58);
-        this.zoomLens = guiHelper.createDrawable(texPath, 111,1, 7 ,7);
+        this.background = guiHelper.createBlankDrawable(169, 58);
+        this.overlay = guiHelper.createDrawable(texPath, 0,0, 91 ,48);
+        this.zoomLens = guiHelper.createDrawable(texPath, 91,3, 7 ,7);
+        this.slot = guiHelper.createDrawable(texPath, 91,13,18,18);
+        this.enchantAlert = guiHelper.createDrawable(texPath, 91, 34, 18, 18);
+        this.overgrownSeed = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BotaniaItems.overgrowthSeed));
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BotaniaItems.clockEye));
     }
 
@@ -70,52 +76,82 @@ public class FloralEntropyRecipeCategory implements IRecipeCategory<FloralEntrop
 
     @Override
     public void draw(FloralEntropyRecipe recipe, IRecipeSlotsView slotsView, PoseStack ms, double mouseX, double mouseY) {
+        int xOffset = getOffset(recipe.getResult());
         RenderSystem.enableBlend();
-        overlay.draw(ms, 5, 0);
+        overlay.draw(ms, xOffset, 0);
+        if(hasEnchanted(recipe.getResult())){
+            enchantAlert.draw(ms, xOffset+27, 2);
+            overgrownSeed.draw(ms, xOffset+28, 3);
+        }
+        xOffset += overlay.getWidth();
+        int yOffset = 6;
+        for(int i=1; i<recipe.getResult().size(); i++){
+            slot.draw(ms, xOffset,yOffset);
+            yOffset += 18;
+            slot.draw(ms, xOffset,yOffset);
+            yOffset = 6;
+            xOffset +=18;
+            i++;
+        }
         if(recipe.getMinTalliedMana() > 0) { //If no mana is required, don't draw the mana bar.
             String zoomFactor = getZoomFactor(recipe.getMinTalliedMana());
-            HUDHandler.renderManaBar(ms, 9, 49, 0x0000FF, 0.75F, recipe.getMinTalliedMana(), (int) (ManaPoolBlockEntity.MAX_MANA / Float.parseFloat(zoomFactor))); //NOTE: This method always creates a mana bar 102 units wide and 5 units tall.
+            HUDHandler.renderManaBar(ms, 55, 50, 0x0000FF, 0.75F, recipe.getMinTalliedMana(), (int) (ManaPoolBlockEntity.MAX_MANA / Float.parseFloat(zoomFactor))); //NOTE: This method always creates a mana bar 102 units wide and 5 units tall.
             Component zoomText = Component.literal("x" + zoomFactor); //Whenever the overlay is reimplemented, add a little magnifying glass icon.
             Font font = Minecraft.getInstance().font;
-            font.draw(ms, zoomText, 22, 37, 0x888888);
-            zoomLens.draw(ms, 12, 37);
+            font.draw(ms, zoomText, 24, 47, 0x888888);
+            zoomLens.draw(ms, 13, 47);
         }
         RenderSystem.disableBlend();
     }
 
     @Override //The role can be INPUT, OUTPUT, CATALYST or RENDER_ONLY. It's what determines whether the recipe shows up when searching recipes or uses for an item.
     public void setRecipe(IRecipeLayoutBuilder builder, FloralEntropyRecipe recipe, IFocusGroup focuses) {
-        builder.addSlot(RecipeIngredientRole.INPUT, 12, 16).addItemStack(recipe.getFlowerAsItemStack())
+        int xOffset = getOffset(recipe.getResult());
+        builder.addSlot(RecipeIngredientRole.INPUT, xOffset+7, 16).addItemStack(recipe.getFlowerAsItemStack())
                 .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.addAll(getInputTooltip(recipe)));
+
+        List<ChanceOutput> outputs = recipe.getResult();
+        ItemStack firstOutput = prepareItemNBT(outputs.get(0)); //This output must be registered first as to not mess up emi compatibility.
+        builder.addSlot(RecipeIngredientRole.OUTPUT, xOffset+66, 4).addItemStack(firstOutput)
+                .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.addAll(getOutputTooltip(firstOutput)));
 
         ItemStack decayed = recipe.getBlockAsItemStack();
         FluidStack fluid = FluidUtil.getFluidContained(decayed).orElse(FluidStack.EMPTY);
 
         if(fluid.isEmpty()){
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 71, 28).addItemStack(decayed)
+            builder.addSlot(RecipeIngredientRole.OUTPUT, xOffset+66, 28).addItemStack(decayed)
                     .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(1, Component.literal("Left over after entropic decay.")));
         }else{
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 71, 28).addFluidStack(fluid.getFluid(), 1000)
+            builder.addSlot(RecipeIngredientRole.OUTPUT, xOffset+66, 28).addFluidStack(fluid.getFluid(), 1000)
                     .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(1, Component.literal("Left over after entropic decay.")));
         }
 
+        xOffset += overlay.getWidth();
+        int yOffset = 6;
 
-        List<ChanceOutput> outputs = recipe.getResult();
-        ItemStack firstOutput = prepareItemNBT(outputs.get(0));
-        builder.addSlot(RecipeIngredientRole.OUTPUT, 71, 4).addItemStack(firstOutput)
-                .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.addAll(getOutputTooltip(firstOutput)));
 
-        List<ItemStack> secondaries = new ArrayList<>();
         for(int i=1; i<outputs.size(); i++){
             ItemStack item = prepareItemNBT(outputs.get(i));
-            secondaries.add(item);
-        }
-        if(!secondaries.isEmpty()){
-            builder.addSlot(RecipeIngredientRole.OUTPUT, 92,4).addItemStacks(secondaries)
+            builder.addSlot(RecipeIngredientRole.OUTPUT, xOffset+1,yOffset+1).addItemStack(item)
                     .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.addAll(getOutputTooltip(recipeSlotView.getDisplayedItemStack().get())));
+            yOffset += 18;
+            if(yOffset > 30){
+                yOffset = 6;
+                xOffset +=18;
+            }
         }
 
     }
+
+    private int getOffset(List<ChanceOutput> outputs){
+        int pairs = (int) Math.round((double) (outputs.size()-1) / 2);
+        return (background.getWidth()-overlay.getWidth()-(slot.getWidth()*pairs)-6)/2;
+    }
+    private boolean hasEnchanted(List<ChanceOutput> outputs){
+        for (ChanceOutput output : outputs){ if (output.isSpecial()) return true; }
+        return false;
+    }
+
     @NotNull
     @Override
     public List<Component> getTooltipStrings(FloralEntropyRecipe recipe, IRecipeSlotsView recipeSlotsView, double mouseX, double mouseY){

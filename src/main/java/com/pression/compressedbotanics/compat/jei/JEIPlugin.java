@@ -1,4 +1,4 @@
-package com.pression.compressedbotanics.jei;
+package com.pression.compressedbotanics.compat.jei;
 
 import com.pression.compressedbotanics.CompressedBotanics;
 import com.pression.compressedbotanics.recipe.FloralEntropyRecipe;
