@@ -3,7 +3,7 @@
   "compressedbotanics.jei.block": "Left over after entropic decay.",
   "compressedbotanics.jei.manabar_1": "Must produce at least ",
   "compressedbotanics.jei.manabar_2": " Diluted",
-  "compressedbotanics.jei.manabar_3": " Mana Pool(s)' worth of mana before entropid decay is possible.",
+  "compressedbotanics.jei.manabar_3": " Mana Pool(s)' worth of mana before entropic decay is possible.",
   "compressedbotanics.jei.zoom": "Mana bar zoomed in (or out) by this factor. Larger zoom means lower represented values.",
   "compressedbotanics.jei.input_min": "Minimum time before decay: ",
   "compressedbotanics.jei.input_max": "Maximum time before decay: ",
