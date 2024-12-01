@@ -1,12 +1,13 @@
 package com.pression.compressedbotanics.mixin;
 
+import com.pression.compressedbotanics.CompressedBotanics;
 import com.pression.compressedbotanics.recipe.ChanceOutput;
 import com.pression.compressedbotanics.recipe.FloralEntropyRecipe;
 import com.pression.compressedbotanics.recipe.FloralEntropyRecipeType;
-import net.minecraft.client.Minecraft;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -70,9 +71,10 @@ public class FloralEntropyMixin {
 
     @Inject(method = "tickFlower", at = @At("TAIL"), remap = false)
     private void onTickFlower(CallbackInfo ci){
-        if(flower.getLevel().isClientSide()) return; //Weird stuff happens if this is not checked.
+        //Additional failsafe for a null level.
+        if(flower.getLevel() == null || flower.getLevel().isClientSide()) return; //Weird stuff happens if this is not checked.
         if(Math.random() < 0.05F){ //Note: if adjusting this, adjust also the chance multiplier in calcDecayChance
-            FloralEntropyRecipe recipe = getResult(BlockEntityType.getKey(flower.getType())); //NOTE: This does NOT care for the variant of flower, be it floating, or chibi (Petit).
+            FloralEntropyRecipe recipe = getResult(BlockEntityType.getKey(flower.getType()), (ServerLevel) flower.getLevel()); //NOTE: This does NOT care for the variant of flower, be it floating, or chibi (Petit).
             if(!decayFlag && recipe != null){
                     if(Math.random() <= calcDecayChance(flower.ticksExisted, recipe.getMaxDecayTicks(), recipe.getMinDecayTicks())) decayFlag = true;
             }
@@ -85,6 +87,9 @@ public class FloralEntropyMixin {
 
     private void entropyTime(GeneratingFlowerBlockEntity flower, FloralEntropyRecipe recipe){
         Level level = flower.getLevel();
+        if(level == null){
+            CompressedBotanics.LOGGER.error("Flower attempted to decay on a null level.");
+        }
         BlockPos pos = flower.getBlockPos();
         flower.getLevel().destroyBlock(pos, false);
         BlockState decayedBlock = ForgeRegistries.BLOCKS.getValue(recipe.getBlock()).defaultBlockState();
@@ -107,8 +112,8 @@ public class FloralEntropyMixin {
 
 
     @Nullable
-    private FloralEntropyRecipe getResult(ResourceLocation flower){
-        List<FloralEntropyRecipe> recipes = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(FloralEntropyRecipeType.FLORAL_ENTROPY_RECIPE_TYPE.get());
+    private FloralEntropyRecipe getResult(ResourceLocation flower, ServerLevel level){
+        List<FloralEntropyRecipe> recipes = level.getRecipeManager().getAllRecipesFor(FloralEntropyRecipeType.FLORAL_ENTROPY_RECIPE_TYPE.get());
         for (FloralEntropyRecipe recipe : recipes){ //There's probably a better way to fo this as well.
             if(recipe.getFlower().equals(flower)) return recipe;
         }

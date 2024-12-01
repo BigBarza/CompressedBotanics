@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 @Mod(CompressedBotanics.MODID)
 public class CompressedBotanics {
     public static final String MODID = "compressedbotanics";
-    private static final Logger LOGGER = LogUtils.getLogger();
+    public static final Logger LOGGER = LogUtils.getLogger();
 
     public CompressedBotanics() {
         LOGGER.info("Hexagons are the bestagons!");
