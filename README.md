@@ -31,11 +31,11 @@ USAGE:
   ],
   "minTalliedMana": 10000 # Must generate at least this much mana before it can decay (Optional)
   "minDecayTicks": 60000, # Even with enough mana generated, won't decay before this many ticks have passed since placing (Optional)
-  "maxDecayTicks": 100000 # Can randomly decay before this many ticks have passed if conditions are met. Will always decay after this treshold.
+  "maxDecayTicks": 100000 # Can randomly decay before this many ticks have passed if conditions are met. Will always decay after this treshold, assuming it has produced enough mana.
 }
 ```
 
-Curseforge link: [TBA]
+Curseforge link: https://www.curseforge.com/minecraft/mc-mods/compressed-botanics
 
 Compression modpack: https://www.curseforge.com/minecraft/modpacks/compression
 
