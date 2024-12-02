@@ -165,7 +165,7 @@ public class FloralEntropyRecipeCategory implements IRecipeCategory<FloralEntrop
                 double pools = mana >= 100000 ? mana / 1000000 : mana / 10000;
                 tooltips.add(Component.translatable("compressedbotanics.jei.manabar_1")
                         .append(String.format("%.2f", pools)) //We...don't need more than two decimals. Do we? I mean, easy to tweak.
-                        .append(Component.translatable(mana >= 100000 ? "" : "compressedbotanics.jei.manabar_2"))
+                        .append(Component.translatable(mana >= 100000 ? "" : "compressedbotanics.jei.manabar_2")) //Specify if we're talking about diluted pools
                         .append(Component.translatable("compressedbotanics.jei.manabar_3")));
 
             }
@@ -201,7 +201,8 @@ public class FloralEntropyRecipeCategory implements IRecipeCategory<FloralEntrop
         CompoundTag nbt = output.getTag();
         tooltips.add(nbt.getFloat("chance") == 1 ? Component.translatable("compressedbotanics.jei.output_guaranteed") :
                 Component.translatable("compressedbotanics.jei.output_chance").append(OrechidUIHelper.getPercentageComponent(nbt.getFloat("chance"))));
-        if(nbt.getFloat("chance") < 1) tooltips.add(Component.translatable(nbt.getBoolean("allornothing") ? "compressedbotanics.jei.output_aon" : "compressedbotanics.jei.output_normal")); //Don't display roll type if guaranteed.
+        //Don't show the type of roll on outputs with a single item.
+        if(nbt.getFloat("chance") < 1 && output.getCount() > 1) tooltips.add(Component.translatable(nbt.getBoolean("allornothing") ? "compressedbotanics.jei.output_aon" : "compressedbotanics.jei.output_normal")); //Don't display roll type if guaranteed.
         if(nbt.getBoolean("enchanted")) tooltips.add(Component.translatable("compressedbotanics.jei.output_enchanted"));
         return tooltips;
     }
