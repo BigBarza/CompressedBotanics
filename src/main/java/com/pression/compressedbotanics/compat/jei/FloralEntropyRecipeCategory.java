@@ -1,7 +1,6 @@
 package com.pression.compressedbotanics.compat.jei;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import com.mojang.blaze3d.vertex.PoseStack;
 import com.pression.compressedbotanics.CompressedBotanics;
 import com.pression.compressedbotanics.recipe.ChanceOutput;
 import com.pression.compressedbotanics.recipe.FloralEntropyRecipe;
@@ -16,6 +15,7 @@ import mezz.jei.api.recipe.RecipeType;
 import mezz.jei.api.recipe.category.IRecipeCategory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -75,31 +75,32 @@ public class FloralEntropyRecipeCategory implements IRecipeCategory<FloralEntrop
     }
 
     @Override
-    public void draw(FloralEntropyRecipe recipe, IRecipeSlotsView slotsView, PoseStack ms, double mouseX, double mouseY) {
+    public void draw(FloralEntropyRecipe recipe, IRecipeSlotsView slotsView, GuiGraphics graphics, double mouseX, double mouseY) {
         int xOffset = getOffset(recipe.getResult());
         RenderSystem.enableBlend();
-        overlay.draw(ms, xOffset, 0);
+        overlay.draw(graphics, xOffset, 0);
         if(hasEnchanted(recipe.getResult())){
-            enchantAlert.draw(ms, xOffset+27, 2);
-            overgrownSeed.draw(ms, xOffset+28, 3);
+            enchantAlert.draw(graphics, xOffset+27, 2);
+            overgrownSeed.draw(graphics, xOffset+28, 3);
         }
         xOffset += overlay.getWidth();
         int yOffset = 6;
         for(int i=1; i<recipe.getResult().size(); i++){
-            slot.draw(ms, xOffset,yOffset);
+            slot.draw(graphics, xOffset,yOffset);
             yOffset += 18;
-            slot.draw(ms, xOffset,yOffset);
+            slot.draw(graphics, xOffset,yOffset);
             yOffset = 6;
             xOffset +=18;
             i++;
         }
         if(recipe.getMinTalliedMana() > 0) { //If no mana is required, don't draw the mana bar.
             String zoomFactor = getZoomFactor(recipe.getMinTalliedMana());
-            HUDHandler.renderManaBar(ms, 55, 50, 0x0000FF, 0.75F, recipe.getMinTalliedMana(), (int) (ManaPoolBlockEntity.MAX_MANA / Float.parseFloat(zoomFactor))); //NOTE: This method always creates a mana bar 102 units wide and 5 units tall.
+            HUDHandler.renderManaBar(graphics, 55, 50, 0x0000FF, 0.75F, recipe.getMinTalliedMana(), (int) (ManaPoolBlockEntity.MAX_MANA / Float.parseFloat(zoomFactor))); //NOTE: This method always creates a mana bar 102 units wide and 5 units tall.
             Component zoomText = Component.literal("x" + zoomFactor);
             Font font = Minecraft.getInstance().font;
-            font.draw(ms, zoomText, 24, 47, 0x888888);
-            zoomLens.draw(ms, 13, 47);
+            graphics.drawString(font, zoomText.getVisualOrderText(), 24, 47, 0x888888, false);
+            //font.draw(ms, zoomText, 24, 47, 0x888888);
+            zoomLens.draw(graphics, 13, 47);
         }
         RenderSystem.disableBlend();
     }

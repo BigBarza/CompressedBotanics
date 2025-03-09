@@ -3,6 +3,7 @@ package com.pression.compressedbotanics.recipe;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -63,7 +64,7 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
     public List<ChanceOutput> getResult() {
         return result;
     }
-    @Override public ItemStack getResultItem(){
+    @Override public ItemStack getResultItem(RegistryAccess reg){
         return ItemStack.EMPTY;
     }
     @Override public RecipeSerializer<?> getSerializer(){return FloralEntropyRecipeType.FLORAL_ENTROPY_SERIALIZER.get();}
@@ -73,7 +74,7 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
     @Override public boolean matches(Inventory inv, Level world){
         return false;
     }
-    @Override public ItemStack assemble(Inventory inv){
+    @Override public ItemStack assemble(Inventory inv, RegistryAccess reg){
         return ItemStack.EMPTY;
     }
     @Override public boolean canCraftInDimensions(int w, int h){

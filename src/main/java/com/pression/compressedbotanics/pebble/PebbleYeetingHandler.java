@@ -14,25 +14,38 @@ import vazkii.botania.common.item.BotaniaItems;
 public class PebbleYeetingHandler {
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
-        //If we would be interacting with a block, don't throw the pebble.
-        InteractionResult result = event.getLevel().getBlockState(event.getPos())
-                .use(event.getLevel(), event.getEntity(), event.getHand(), event.getHitVec());
-        if(result.consumesAction()){
-            event.setCancellationResult(result);
-            event.setCanceled(true);
-            return;
+        //Don't know why i didn't do this before, this should prevent...unforeseen events with other items.
+        if(event.getItemStack().getItem().equals(BotaniaItems.pebble)){
+            //If we would be interacting with a block, don't throw the pebble.
+            InteractionResult result = event.getLevel().getBlockState(event.getPos())
+                    .use(event.getLevel(), event.getEntity(), event.getHand(), event.getHitVec());
+            if(result.consumesAction()){
+                event.setCancellationResult(result);
+                event.setCanceled(true);
+            }
+            //I don't think this does anything. It was meant to allow collecting pebbles with pebbles in the hand.
+            else if(!event.getEntity().isCrouching()) yeetPebble(event);
         }
-        //I don't think this does anything. It was meant to allow collecting pebbles with pebbles in the hand.
-        if(!event.getEntity().isCrouching()) yeetPebble(event);
     }
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event){
-        yeetPebble(event);
+        if(event.getItemStack().getItem().equals(BotaniaItems.pebble)) yeetPebble(event);
 
     }
     @SubscribeEvent
     public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event){
-        yeetPebble(event);
+        if(event.getItemStack().getItem().equals(BotaniaItems.pebble)){
+            InteractionResult result = event.getTarget().interact(
+                    event.getEntity(), event.getHand()
+            );
+            if(result.consumesAction()){
+                event.setCancellationResult(result);
+                event.setCanceled(true);
+            }
+            else yeetPebble(event);
+        }
+
+
     }
 
     private static void yeetPebble(PlayerInteractEvent event){
@@ -40,11 +53,11 @@ public class PebbleYeetingHandler {
         Player player = event.getEntity();
         if(stack.is(BotaniaItems.pebble)){
             //Really should register a separate sound event for this. It's only really going to affect stuff like subtitles.
-            player.getLevel().playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.getLevel().getRandom().nextFloat() * 0.4F + 0.8F));
-            if(!player.getLevel().isClientSide()){
+            player.level().playSound((Player) null, player.getX(), player.getY(), player.getZ(), SoundEvents.SNOWBALL_THROW, SoundSource.NEUTRAL, 0.5F, 0.4F / (player.level().getRandom().nextFloat() * 0.4F + 0.8F));
+            if(!player.level().isClientSide()){
                 ThrownPebbleEntity pebble = new ThrownPebbleEntity(player);
                 pebble.shootFromRotation(player, player.getXRot(), player.getYRot(), 0f, (float) (Math.random()/2)+0.25f, 10f);
-                player.getLevel().addFreshEntity(pebble);
+                player.level().addFreshEntity(pebble);
             }
             if(!player.getAbilities().instabuild){
                 stack.shrink(1);
