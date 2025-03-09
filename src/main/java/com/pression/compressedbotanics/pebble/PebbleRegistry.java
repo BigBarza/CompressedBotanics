@@ -13,12 +13,11 @@ public class PebbleRegistry {
     public static final DeferredRegister<EntityType<?>> ENTITIES =
             DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, CompressedBotanics.MODID);
 
-    public static final EntityType<ThrownPebbleEntity> THROWN_PEBBLE_TYPE = EntityType.Builder.<ThrownPebbleEntity>of(ThrownPebbleEntity::new, MobCategory.MISC)
-            .sized(0.15f, 0.15f)
-            .build(new ResourceLocation(CompressedBotanics.MODID, "thrown_pebble").toString());
-
     //I split this up and now i forgot how to put it back together, so it's just...gonna stay like this.
-    public static final RegistryObject<EntityType<ThrownPebbleEntity>> THROWN_PEBBLE = ENTITIES.register("thrown_pebble", () -> THROWN_PEBBLE_TYPE);
+    public static final RegistryObject<EntityType<ThrownPebbleEntity>> THROWN_PEBBLE = ENTITIES.register("thrown_pebble",
+            () -> EntityType.Builder.<ThrownPebbleEntity>of(ThrownPebbleEntity::new, MobCategory.MISC)
+                    .sized(0.15f, 0.15f)
+                    .build(new ResourceLocation(CompressedBotanics.MODID, "thrown_pebble").toString()));
 
     public static void register(IEventBus bus){
         ENTITIES.register(bus);

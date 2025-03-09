@@ -14,25 +14,36 @@ import vazkii.botania.common.item.BotaniaItems;
 public class PebbleYeetingHandler {
     @SubscribeEvent
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event){
-        //If we would be interacting with a block, don't throw the pebble.
-        InteractionResult result = event.getLevel().getBlockState(event.getPos())
-                .use(event.getLevel(), event.getEntity(), event.getHand(), event.getHitVec());
-        if(result.consumesAction()){
-            event.setCancellationResult(result);
-            event.setCanceled(true);
-            return;
+        //Don't know why i didn't do this before, this should prevent...unforeseen events with other items.
+        if(event.getItemStack().getItem().equals(BotaniaItems.pebble)){
+            //If we would be interacting with a block, don't throw the pebble.
+            InteractionResult result = event.getLevel().getBlockState(event.getPos())
+                    .use(event.getLevel(), event.getEntity(), event.getHand(), event.getHitVec());
+            if(result.consumesAction()){
+                event.setCancellationResult(result);
+                event.setCanceled(true);
+            }
+            //I don't think this does anything. It was meant to allow collecting pebbles with pebbles in the hand.
+            else if(!event.getEntity().isCrouching()) yeetPebble(event);
         }
-        //I don't think this does anything. It was meant to allow collecting pebbles with pebbles in the hand.
-        if(!event.getEntity().isCrouching()) yeetPebble(event);
     }
     @SubscribeEvent
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event){
-        yeetPebble(event);
+        if(event.getItemStack().getItem().equals(BotaniaItems.pebble)) yeetPebble(event);
 
     }
     @SubscribeEvent
     public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event){
-        yeetPebble(event);
+        if(event.getItemStack().getItem().equals(BotaniaItems.pebble)){
+            InteractionResult result = event.getTarget().interact(
+                    event.getEntity(), event.getHand()
+            );
+            if(result.consumesAction()){
+                event.setCancellationResult(result);
+                event.setCanceled(true);
+            }
+            else yeetPebble(event);
+        }
     }
 
     private static void yeetPebble(PlayerInteractEvent event){
