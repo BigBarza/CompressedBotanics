@@ -112,7 +112,7 @@ public class FloralEntropyMixin {
 
 
     @Nullable
-    private FloralEntropyRecipe getResult(ResourceLocation flower, ServerLevel level){
+    public static FloralEntropyRecipe getResult(ResourceLocation flower, ServerLevel level){
         List<FloralEntropyRecipe> recipes = level.getRecipeManager().getAllRecipesFor(FloralEntropyRecipeType.FLORAL_ENTROPY_RECIPE_TYPE.get());
         for (FloralEntropyRecipe recipe : recipes){ //There's probably a better way to fo this as well.
             if(recipe.getFlower().equals(flower)) return recipe;
