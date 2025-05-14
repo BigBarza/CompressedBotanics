@@ -3,10 +3,8 @@ package com.pression.compressedbotanics.mixin;
 import com.pression.compressedbotanics.CompressedBotanics;
 import com.pression.compressedbotanics.recipe.ChanceOutput;
 import com.pression.compressedbotanics.recipe.FloralEntropyRecipe;
-import com.pression.compressedbotanics.recipe.FloralEntropyRecipeType;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
@@ -23,9 +21,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vazkii.botania.api.block_entity.GeneratingFlowerBlockEntity;
 import vazkii.botania.common.block.BotaniaBlocks;
-
-import javax.annotation.Nullable;
-import java.util.List;
 
 @Mixin(GeneratingFlowerBlockEntity.class)
 public class FloralEntropyMixin {
@@ -74,7 +69,7 @@ public class FloralEntropyMixin {
         //Additional failsafe for a null level.
         if(flower.getLevel() == null || flower.getLevel().isClientSide()) return; //Weird stuff happens if this is not checked.
         if(Math.random() < 0.05F){ //Note: if adjusting this, adjust also the chance multiplier in calcDecayChance
-            FloralEntropyRecipe recipe = getResult(BlockEntityType.getKey(flower.getType()), (ServerLevel) flower.getLevel()); //NOTE: This does NOT care for the variant of flower, be it floating, or chibi (Petit).
+            FloralEntropyRecipe recipe = FloralEntropyRecipe.getResult(BlockEntityType.getKey(flower.getType()), (ServerLevel) flower.getLevel()); //NOTE: This does NOT care for the variant of flower, be it floating, or chibi (Petit).
             if(!decayFlag && recipe != null){
                     if(Math.random() <= calcDecayChance(flower.ticksExisted, recipe.getMaxDecayTicks(), recipe.getMinDecayTicks())) decayFlag = true;
             }
@@ -110,15 +105,6 @@ public class FloralEntropyMixin {
         }
     }
 
-
-    @Nullable
-    public static FloralEntropyRecipe getResult(ResourceLocation flower, ServerLevel level){
-        List<FloralEntropyRecipe> recipes = level.getRecipeManager().getAllRecipesFor(FloralEntropyRecipeType.FLORAL_ENTROPY_RECIPE_TYPE.get());
-        for (FloralEntropyRecipe recipe : recipes){ //There's probably a better way to fo this as well.
-            if(recipe.getFlower().equals(flower)) return recipe;
-        }
-        return null;
-    }
     @Unique
     private boolean isOvergrow(GeneratingFlowerBlockEntity flower){ //This function is in SpecialFlowerBlockEntity but for SOME reason, it's inaccessible. So i'm making my own.
         if(flower.isFloating()) return false;

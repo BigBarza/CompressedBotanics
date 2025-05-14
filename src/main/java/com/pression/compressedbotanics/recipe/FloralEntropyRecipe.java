@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
@@ -91,6 +92,15 @@ public class FloralEntropyRecipe implements Recipe<Inventory> {
         return new ItemStack(ForgeRegistries.ITEMS.getValue(getBlock()), 1);
     }
 
+    @Nullable
+    public static FloralEntropyRecipe getResult(ResourceLocation flower, ServerLevel level){
+        List<FloralEntropyRecipe> recipes = level.getRecipeManager().getAllRecipesFor(FloralEntropyRecipeType.FLORAL_ENTROPY_RECIPE_TYPE.get());
+        for (FloralEntropyRecipe recipe : recipes){ //There's probably a better way to fo this as well.
+            if(recipe.getFlower().equals(flower)) return recipe;
+        }
+        return null;
+    }
+    
     public static class Serializer implements RecipeSerializer<FloralEntropyRecipe>{
         @Override
         public FloralEntropyRecipe fromJson(ResourceLocation id, JsonObject json) {
