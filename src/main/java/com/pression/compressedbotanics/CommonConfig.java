@@ -16,9 +16,9 @@ public class CommonConfig {
         ELYTRA_MANA_REPAIR = BUILDER.comment("Whether Elytras can repair themselves with mana, like manasteel armor")
                         .define("Enable Elytra Mana Repair", true);
         ELYTRA_MANA_DAMAGE_COST = BUILDER.comment("How much mana should the elytra draw instead of taking a point of durability. Manasteel armor is 70.")
-                        .define("Elytra Repair Mana Cost", 70);
+                        .define("Elytra Damage Negation Cost", 100);
         ELYTRA_MANA_REPAIR_COST = BUILDER.comment("How much mana should the elytra draw to repair a previously lost point of durability. Manasteel armor is 140.")
-                .define("Elytra Repair Mana Cost", 140);
+                .define("Elytra Damage Repair Cost", 200);
 
         BUILDER.pop();
         SPEC = BUILDER.build();
