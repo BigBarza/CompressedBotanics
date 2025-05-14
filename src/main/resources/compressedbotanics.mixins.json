@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "compressedbotanics.refmap.json",
   "mixins": [
+    "ElytraMixin",
     "FloralEntropyMixin",
     "HydroangeasMixin"
   ],
