@@ -9,7 +9,10 @@
     "FloralEntropyMixin",
     "HydroangeasMixin"
   ],
-  "client": [],
+  "client": [
+    "ApothecaryJEIMixin",
+    "PureDaisyJEIMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }

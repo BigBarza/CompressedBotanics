@@ -15,5 +15,6 @@
   "compressedbotanics.jei.output_enchanted": "\u00a7aMust decay on enchanted soil",
   "compressedbotanics.jei.enchanted_warning_1": "\u00A7eWarning!\u00A7r One or more outputs in this recipe require the flower to be on enchanted soil.",
   "compressedbotanics.jei.enchanted_warning_2": "\u00A7cFloating flowers do not benefit from enchanted soil!",
+  "compressedbotanics.jei.apothecary_reagent": "Reagent item, must be added last.",
   "entity.compressedbotanics.thrown_pebble": "Pebble"
 }
