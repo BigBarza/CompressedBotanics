@@ -1,4 +1,4 @@
-package com.pression.compressedbotanics.mixin;
+package com.pression.compressedbotanics.mixin.jei;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -31,7 +31,7 @@ public class ApothecaryJEIMixin {
     @Inject(method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lvazkii/botania/api/recipe/PetalApothecaryRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V", at = @At("TAIL"), remap = false)
     private void addReagent(IRecipeLayoutBuilder builder, PetalApothecaryRecipe recipe, IFocusGroup focusGroup, CallbackInfo ci){
         builder.addSlot(RecipeIngredientRole.INPUT, 48, 29).addIngredients(recipe.getReagent())
-                .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(1, Component.translatable("compressedbotanics.jei.apothecary_reagent")));
+                .addTooltipCallback((recipeSlotView, tooltip) -> tooltip.add(1, Component.translatable("compressedbotanics.jei.catalyst")));
     }
     @Inject(method = "draw(Lvazkii/botania/api/recipe/PetalApothecaryRecipe;Lmezz/jei/api/gui/ingredient/IRecipeSlotsView;Lcom/mojang/blaze3d/vertex/PoseStack;DD)V", at = @At("HEAD"), remap = false)
     private void addPlus(PetalApothecaryRecipe recipe, IRecipeSlotsView slotsView, PoseStack ms, double mouseX, double mouseY, CallbackInfo ci){

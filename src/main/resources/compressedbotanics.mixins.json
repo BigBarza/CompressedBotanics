@@ -7,11 +7,17 @@
   "mixins": [
     "ElytraMixin",
     "FloralEntropyMixin",
-    "HydroangeasMixin"
+    "HydroangeasMixin",
+    "runic_altar.HeadRecipeSerializerMixin",
+    "runic_altar.RunicAltarMixin",
+    "runic_altar.RunicAltarRecipeMixin",
+    "runic_altar.RunicAltarRecipeSerializerMixin"
   ],
   "client": [
-    "ApothecaryJEIMixin",
-    "PureDaisyJEIMixin"
+    "jei.ApothecaryJEIMixin",
+    "jei.PureDaisyJEIMixin",
+    "jei.RunicAltarJEIMixin",
+    "runic_altar.RunicAltarHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

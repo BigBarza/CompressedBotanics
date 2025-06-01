@@ -1,4 +1,4 @@
-package com.pression.compressedbotanics.mixin;
+package com.pression.compressedbotanics.mixin.jei;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
