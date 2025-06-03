@@ -26,7 +26,7 @@ public class CommonConfig {
         COCOON_NO_EMERALD = BUILDER.comment("Whether to block emeralds from being used on the Cocoon of Caprice, making it unable to spawn villagers")
                         .define("No Villagers from Cocoon", false);
         COCOON_NO_CHORUS = BUILDER.comment("Whether to block chorus fruits from being used on the Cocoon of Caprice, making it unable to spawn shulkers")
-                .define("No Villagers from Cocoon", false);
+                .define("No Shulkers from Cocoon", false);
         COCOON_NO_GAIA = BUILDER.comment("Whether to block gaia spirits from being used on the Cocoon of Caprice, forcing players to use the normal rare mob chances")
                 .define("No guaranteed rares from Cocoon", false);
         COCOON_RARE_CHANCE = BUILDER.comment("The chance that a Cocoon of Caprice spawns from the rare list instead of the common list. Default is 0.075 or 7.5%")
