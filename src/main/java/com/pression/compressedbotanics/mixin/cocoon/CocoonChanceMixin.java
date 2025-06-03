@@ -1,4 +1,4 @@
-package com.pression.compressedbotanics.mixin;
+package com.pression.compressedbotanics.mixin.cocoon;
 
 import com.pression.compressedbotanics.CommonConfig;
 import org.spongepowered.asm.mixin.Mixin;
