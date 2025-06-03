@@ -56,7 +56,6 @@ public class FloralEntropyRecipeCategory implements IRecipeCategory<FloralEntrop
         this.overgrownSeed = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BotaniaItems.overgrowthSeed));
         this.icon = guiHelper.createDrawableIngredient(VanillaTypes.ITEM_STACK, new ItemStack(BotaniaItems.clockEye));
     }
-
     @Override
     public RecipeType<FloralEntropyRecipe> getRecipeType() {
         return TYPE;
