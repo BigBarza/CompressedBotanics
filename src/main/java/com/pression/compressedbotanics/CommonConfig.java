@@ -13,6 +13,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> COCOON_NO_CHORUS;
     public static final ForgeConfigSpec.ConfigValue<Boolean> COCOON_NO_GAIA;
     public static final ForgeConfigSpec.ConfigValue<Double> COCOON_RARE_CHANCE;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> NO_RUNE_REFUND;
 
     static {
         BUILDER.push("Compressed Botanics Config");
@@ -31,7 +32,8 @@ public class CommonConfig {
                 .define("No guaranteed rares from Cocoon", false);
         COCOON_RARE_CHANCE = BUILDER.comment("The chance that a Cocoon of Caprice spawns from the rare list instead of the common list. Default is 0.075 or 7.5%")
                 .defineInRange("Cocoon Rare Chance", 0.075, 0,1);
-
+        NO_RUNE_REFUND = BUILDER.comment("Whether to disable runes being returned from runic altar recipes")
+                .define("Disable Runic Altar Rune Refund", false);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
