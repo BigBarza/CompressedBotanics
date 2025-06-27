@@ -4,8 +4,6 @@ import com.pression.compressedbotanics.CommonConfig;
 import com.pression.compressedbotanics.recipe.IRunicRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.entity.player.Abilities;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -65,15 +63,12 @@ public class RunicAltarMixin {
     }
 
     //This is a dirty hack to disable giving back runes from runic altar crafts.
-    @Redirect(method = "onUsedByWand", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/player/Player;getAbilities()Lnet/minecraft/world/entity/player/Abilities;"))
-    private Abilities checkRuneRefundConfig(Player player){
+    @Redirect(method = "onUsedByWand", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getItem()Lnet/minecraft/world/item/Item;"))
+    private Item checkRuneRefundConfig(ItemStack instance){
         if(CommonConfig.NO_RUNE_REFUND.get()){
-            //Yup. It's as jank as it looks. This was the best injection point, so just pass a dummy Abilities object.
-            Abilities dummy = new Abilities();
-            dummy.instabuild = true;
-            return dummy;
+            return ItemStack.EMPTY.getItem();
         }
-        else return player.getAbilities();
+        else return instance.getItem();
     }
 
     @ModifyVariable(method = "onUsedByWand", at = @At("STORE"), index = 6, remap = false)
