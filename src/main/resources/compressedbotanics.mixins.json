@@ -5,10 +5,22 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "compressedbotanics.refmap.json",
   "mixins": [
+    "ElytraMixin",
     "FloralEntropyMixin",
-    "HydroangeasMixin"
+    "HydroangeasMixin",
+    "cocoon.CocoonChanceMixin",
+    "cocoon.CocoonMixin",
+    "runic_altar.HeadRecipeSerializerMixin",
+    "runic_altar.RunicAltarMixin",
+    "runic_altar.RunicAltarRecipeMixin",
+    "runic_altar.RunicAltarRecipeSerializerMixin"
   ],
-  "client": [],
+  "client": [
+    "jei.ApothecaryJEIMixin",
+    "jei.PureDaisyJEIMixin",
+    "jei.RunicAltarJEIMixin",
+    "runic_altar.RunicAltarHudMixin"
+  ],
   "injectors": {
     "defaultRequire": 1
   }
