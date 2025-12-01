@@ -3,6 +3,7 @@ package com.pression.compressedbotanics.mixin.runic_altar;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.pression.compressedbotanics.recipe.IRunicRecipe;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
@@ -25,7 +26,7 @@ public class RunicAltarHudMixin {
     private static long timer = 0;
 
     @Inject(method = "lambda$render$0", at = @At("HEAD"), remap = false)
-    private static void captureVariables(RunicAltarBlockEntity altar, PoseStack ms, int xc, int radius, int yc, Minecraft mc, RunicAltarRecipe recipe, CallbackInfo ci){
+    private static void captureVariables(RunicAltarBlockEntity altar, GuiGraphics gui, int xc, int radius, int yc, PoseStack ms, Minecraft mc, RunicAltarRecipe recipe, CallbackInfo ci){
         curRecipe = recipe;
         if(altar.getLevel()!=null) timer = altar.getLevel().getGameTime();
     }
