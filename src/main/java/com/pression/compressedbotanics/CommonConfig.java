@@ -14,6 +14,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<Boolean> COCOON_NO_GAIA;
     public static final ForgeConfigSpec.ConfigValue<Double> COCOON_RARE_CHANCE;
     public static final ForgeConfigSpec.ConfigValue<Boolean> NO_RUNE_REFUND;
+    public static final ForgeConfigSpec.ConfigValue<Boolean> HYDROANGEAS_DECAY;
 
     static {
         BUILDER.push("Compressed Botanics Config");
@@ -34,6 +35,8 @@ public class CommonConfig {
                 .defineInRange("Cocoon Rare Chance", 0.075, 0,1);
         NO_RUNE_REFUND = BUILDER.comment("Whether to disable runes being returned from runic altar recipes")
                 .define("Disable Runic Altar Rune Refund", false);
+        HYDROANGEAS_DECAY = BUILDER.comment("Whether Hydroangeas should decay naturally. Set this to false if implementing a recipe for them.")
+                .define("Enable Natural Hydroangeas Decay", true);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }

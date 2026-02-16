@@ -1,5 +1,6 @@
 package com.pression.compressedbotanics.mixin;
 
+import com.pression.compressedbotanics.CommonConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -12,6 +13,6 @@ public class HydroangeasMixin { //This is just a small thing because i could not
     @Shadow(remap = false) private int passiveDecayTicks;
     @Inject(method = "tickFlower", at = @At("TAIL"), remap = false)
     private void yeet(CallbackInfo ci){
-        passiveDecayTicks = 0;
+        if(!CommonConfig.HYDROANGEAS_DECAY.get()) passiveDecayTicks = 0;
     }
 }
