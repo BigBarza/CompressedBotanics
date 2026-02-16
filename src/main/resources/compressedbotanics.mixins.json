@@ -8,6 +8,7 @@
     "ElytraMixin",
     "FloralEntropyMixin",
     "HydroangeasMixin",
+    "RetainerEntityMixin",
     "cocoon.CocoonChanceMixin",
     "cocoon.CocoonMixin",
     "runic_altar.HeadRecipeSerializerMixin",
