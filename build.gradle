@@ -129,6 +129,8 @@ repositories {
     maven { url 'https://maven.blamejared.com' }
     maven { url 'https://maven.parchmentmc.org' }
     maven { url 'https://maven.theillusivec4.top/' }
+    maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
+    maven { url = "https://maven.createmod.net" }
 }
 
 mixin {
@@ -147,6 +149,7 @@ dependencies {
     implementation fg.deobf("vazkii.botania:Botania:${version_botania}")
     implementation fg.deobf("mezz.jei:jei-1.20.1-forge-api:${version_jei}")
     implementation fg.deobf("mezz.jei:jei-1.20.1-common-api:${version_jei}")
+    implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${version_ponder}")
 
     implementation "io.github.llamalad7:mixinextras-common:${version_mixinExtras}"
     annotationProcessor "io.github.llamalad7:mixinextras-common:${version_mixinExtras}"

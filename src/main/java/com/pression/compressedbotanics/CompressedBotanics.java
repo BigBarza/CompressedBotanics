@@ -39,6 +39,8 @@ public class CompressedBotanics {
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CommonConfig.SPEC);
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, ClientConfig.SPEC);
+
     }
 
     //For some bloody reason, these don't work elsewhere. So they'll just stay here.
