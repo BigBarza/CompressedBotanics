@@ -12,6 +12,9 @@
     "RetainerEntityMixin",
     "cocoon.CocoonChanceMixin",
     "cocoon.CocoonMixin",
+    "emi.ApothecaryEMIMixin",
+    "emi.PureDaisyEMIMixin",
+    "emi.RunicAltarEMIMixin",
     "runic_altar.HeadRecipeSerializerMixin",
     "runic_altar.RunicAltarMixin",
     "runic_altar.RunicAltarRecipeMixin",
@@ -22,9 +25,8 @@
     "jei.ApothecaryJEIMixin",
     "jei.PureDaisyJEIMixin",
     "jei.RunicAltarJEIMixin",
-    "runic_altar.RunicAltarHudMixin",
     "ponder_compat.RedStringPonderCompatMixin",
-    "RenderHelperMixin"
+    "runic_altar.RunicAltarHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1

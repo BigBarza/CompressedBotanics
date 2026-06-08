@@ -131,6 +131,7 @@ repositories {
     maven { url 'https://maven.theillusivec4.top/' }
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
     maven { url = "https://maven.createmod.net" }
+    maven { url = "https://maven.terraformersmc.com/" }
 }
 
 mixin {
@@ -150,6 +151,8 @@ dependencies {
     implementation fg.deobf("mezz.jei:jei-1.20.1-forge-api:${version_jei}")
     implementation fg.deobf("mezz.jei:jei-1.20.1-common-api:${version_jei}")
     implementation fg.deobf("net.createmod.ponder:Ponder-Forge-${minecraft_version}:${version_ponder}")
+
+    implementation fg.deobf("dev.emi:emi-forge:${version_emi}")
 
     implementation "io.github.llamalad7:mixinextras-common:${version_mixinExtras}"
     annotationProcessor "io.github.llamalad7:mixinextras-common:${version_mixinExtras}"
