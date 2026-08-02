@@ -15,6 +15,7 @@
     "emi.ApothecaryEMIMixin",
     "emi.PureDaisyEMIMixin",
     "emi.RunicAltarEMIMixin",
+    "ponder_compat.PonderSceneMixin",
     "runic_altar.HeadRecipeSerializerMixin",
     "runic_altar.RunicAltarMixin",
     "runic_altar.RunicAltarRecipeMixin",
@@ -26,6 +27,7 @@
     "jei.PureDaisyJEIMixin",
     "jei.RunicAltarJEIMixin",
     "ponder_compat.RedStringPonderCompatMixin",
+    "ponder_compat.SparkPonderCompatMixin",
     "runic_altar.RunicAltarHudMixin"
   ],
   "injectors": {

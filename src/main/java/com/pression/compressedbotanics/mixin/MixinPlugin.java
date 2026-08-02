@@ -14,6 +14,8 @@ public class MixinPlugin implements IMixinConfigPlugin {
     public boolean shouldApplyMixin(String targetClassName, String mixinClassName) {
         //The mixin involving ponders should only load if ponder is present.
         if(mixinClassName.contains("RedStringPonderCompatMixin")) return LoadingModList.get().getModFileById("ponder") != null;
+        if(mixinClassName.contains("PonderSceneMixin")) return LoadingModList.get().getModFileById("ponder") != null;
+        if(mixinClassName.contains("SparkPonderCompatMixin")) return LoadingModList.get().getModFileById("ponder") != null;
         if(mixinClassName.contains("JEI")) return LoadingModList.get().getModFileById("jei") != null;
         if(mixinClassName.contains("EMI")) return LoadingModList.get().getModFileById("emi") != null;
         else return true;
