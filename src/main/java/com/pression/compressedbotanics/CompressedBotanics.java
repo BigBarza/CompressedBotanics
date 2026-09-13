@@ -8,9 +8,13 @@ import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.AbstractProjectileDispenseBehavior;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -28,6 +32,8 @@ import vazkii.botania.common.item.BotaniaItems;
 public class CompressedBotanics {
     public static final String MODID = "compressedbotanics";
     public static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final TagKey<Block> BORE_LENS_NO_HARVEST = BlockTags.create(new ResourceLocation(MODID, "bore_lens_blacklist"));
 
     public CompressedBotanics() {
         LOGGER.info("Hexagons are the bestagons!");
