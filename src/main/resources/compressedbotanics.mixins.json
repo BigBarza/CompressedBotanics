@@ -11,7 +11,7 @@
     "FloralEntropyMixin",
     "HydroangeasMixin",
     "RetainerEntityMixin",
-    "cocoon.CocoonChanceMixin",
+    "cocoon.CocoonBlockEntityMixin",
     "cocoon.CocoonMixin",
     "emi.ApothecaryEMIMixin",
     "emi.PureDaisyEMIMixin",
