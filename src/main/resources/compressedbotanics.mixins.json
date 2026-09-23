@@ -10,6 +10,7 @@
     "ElytraMixin",
     "FloralEntropyMixin",
     "HydroangeasMixin",
+    "ManaPoolMixin",
     "RetainerEntityMixin",
     "cocoon.CocoonBlockEntityMixin",
     "cocoon.CocoonMixin",

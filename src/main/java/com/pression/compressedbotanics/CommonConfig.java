@@ -16,6 +16,7 @@ public class CommonConfig {
     public static final ForgeConfigSpec.ConfigValue<Integer> COCOON_HATCH_TIME;
     public static final ForgeConfigSpec.ConfigValue<Boolean> NO_RUNE_REFUND;
     public static final ForgeConfigSpec.ConfigValue<Boolean> HYDROANGEAS_DECAY;
+    public static final ForgeConfigSpec.ConfigValue<Integer> FABULOUS_POOL_CAPACITY;
 
     static {
         BUILDER.push("Compressed Botanics Config");
@@ -40,6 +41,8 @@ public class CommonConfig {
                 .define("Disable Runic Altar Rune Refund", false);
         HYDROANGEAS_DECAY = BUILDER.comment("Whether Hydroangeas should decay naturally. Set this to false if implementing a recipe for them.")
                 .define("Enable Natural Hydroangeas Decay", true);
+        FABULOUS_POOL_CAPACITY = BUILDER.comment("Capacity of the Fabolous Mana Pool. Default is 1000000. Yes, numerical mana, deal with it.")
+                .defineInRange("Fabulous Pool Mana Capacity", 1000000, 1, Integer.MAX_VALUE);
         BUILDER.pop();
         SPEC = BUILDER.build();
     }
